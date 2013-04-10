@@ -1,6 +1,8 @@
 #include "Base.h"
 #include "Player.h"
 
+//derp
+
 bool key[4] = {false, false, false, false};
 ALLEGRO_BITMAP *background;
 ALLEGRO_SAMPLE *music;
