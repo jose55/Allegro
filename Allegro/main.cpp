@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	AddSprite("sprite1.png", 0);
 	AddSprite("sprite2.png", 0);
 	AddSprite("sprite3.png", 0);
-	//AddSprite("jump.png", 0);
+	AddSprite("jump.png", 0);
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -20,13 +20,13 @@ int main(int argc, char **argv)
 
 	al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 
-	for (int i = 0; i < 5000; i++)
+	while (true)
 	{
 		if (state.Update() == -1)
 			break;
 
-		if (i % 50 == 0)
-			printf("Loop: %i\n", i);
+		//if (i % 50 == 0)
+		//	printf("Loop: %i\n", i);
 	}
 
 	return 0;

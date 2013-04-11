@@ -24,13 +24,15 @@ public:
     bool redraw;
 
 	GameState(int width, int height, char *bg_location);
-	~GameState();
+	~GameState(void);
 
-	void Render();
-	int Update();
-	int CheckEvents();
+	void Render(void);
+	int Update(void);
+	int CheckEvents(void);
 	int CheckKeyboard(ALLEGRO_EVENT ev);
 	int GameLogic(ALLEGRO_EVENT ev);
+
+	int LoadContent(void);
 };
 
 #endif

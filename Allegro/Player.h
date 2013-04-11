@@ -18,17 +18,16 @@ class Player
 	bool moving;
 	bool inair;
 
-	Player();
-	~Player();
+	Player(void);
+	~Player(void);
 
 	std::vector<ALLEGRO_BITMAP*> spriteVector;
 
 	bool FacingLeft, FacingRight;
-	int FaceLeft();
-	int FaceRight();
+	int FaceLeft(void);
+	int FaceRight(void);
 
 	std::string sprite_directory;
-
 };
 
 int AddPlayer(int x, int y, char* directory, int max_frames, int frame_delay);

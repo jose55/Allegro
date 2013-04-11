@@ -114,8 +114,12 @@ void GameState::Render()
 	al_draw_bitmap(background, 0, 0, NULL);
 
 	for (unsigned int i = 0; i < pVector.size(); i++)
-	al_draw_bitmap(pVector[0].spriteVector[pVector[0].curFrame], pVector[0].xpos, pVector[0].ypos, pVector[0].FacingLeft == true?ALLEGRO_FLIP_HORIZONTAL:NULL);
-	
+	{
+		if (pVector[0].inair == false)
+		al_draw_bitmap(pVector[0].spriteVector[pVector[0].curFrame], pVector[0].xpos, pVector[0].ypos, pVector[0].FacingLeft == true?ALLEGRO_FLIP_HORIZONTAL:NULL);
+		else
+		al_draw_bitmap(pVector[0].spriteVector[3], pVector[0].xpos, pVector[0].ypos, pVector[0].FacingLeft == true?ALLEGRO_FLIP_HORIZONTAL:NULL);
+	}
 	al_flip_display();
 }
 
@@ -151,7 +155,6 @@ int GameState::CheckEvents()
 	
 	return 0;
 }
-
 
 //CheckKeyboard returns -1 if close is pressed
 //CheckKeyboard updates the "key[4]" bool to return correct keystates
@@ -267,7 +270,7 @@ int GameState::GameLogic(ALLEGRO_EVENT ev)
 		if (pVector[0].inair == false)
 			pVector[0].moving = true;
 		else
-		pVector[0].curFrame = 0;
+			pVector[0].curFrame = 0;
 	}
 	else if (key[KEY_RIGHT])
 	{
@@ -281,7 +284,7 @@ int GameState::GameLogic(ALLEGRO_EVENT ev)
 		pVector[0].FaceRight();
 		if (pVector[0].inair == false)
 			pVector[0].moving = true;
-		else;
+		else
 			pVector[0].curFrame = 0;
 	}
 	else
@@ -327,3 +330,9 @@ int GameState::GameLogic(ALLEGRO_EVENT ev)
 
 	return 0;
 }
+
+/*
+int GameState::LoadContent()
+{
+
+}*/
