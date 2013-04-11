@@ -24,6 +24,7 @@ Player::Player()
 	frameCount = 0;
 	curFrame = 0;
 	moving = false;
+	inair = true;
 }
 
 Player::~Player()

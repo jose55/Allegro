@@ -16,6 +16,7 @@ class Player
 	int frameCount;
 	int frameDelay;
 	bool moving;
+	bool inair;
 
 	Player();
 	~Player();

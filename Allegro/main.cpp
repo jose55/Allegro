@@ -7,11 +7,12 @@ int main(int argc, char **argv)
 {
 	GameState state(640, 480, "resources/bg.bmp");
 
-	AddPlayer(50, 50, "resources/", 3, 5);
+	AddPlayer(50, 350, "resources/", 3, 5);
 	
 	AddSprite("sprite1.png", 0);
 	AddSprite("sprite2.png", 0);
 	AddSprite("sprite3.png", 0);
+	//AddSprite("jump.png", 0);
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 

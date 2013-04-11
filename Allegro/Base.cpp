@@ -3,13 +3,19 @@
 
 //derp
 
-bool key[4] = {false, false, false, false};
+bool key[5] = {false, false, false, false, false};
 ALLEGRO_BITMAP *background;
 ALLEGRO_SAMPLE *music;
 
-#define MAXSPEED 6
-#define SPEEDUP 0.5
-#define SLOWDOWNMULT 1.1
+#define XMAXSPEED 5
+#define XSPEEDUP 0.33
+#define XSLOWDOWNMULT 1.15
+
+#define YJUMPHEIGHT -15
+#define JUMPSPEED 7
+#define YGRAVITY .2
+#define GROUNDHEIGHT 387
+#define MAXFALLSPEED 6
 
 GameState::GameState(int width, int height, char* bg_location)
 {
@@ -18,6 +24,8 @@ GameState::GameState(int width, int height, char* bg_location)
 		fprintf(stderr, "failed to initialize allegro!\n");
 		al_show_native_message_box(al_get_current_display(), "Error", "Allegro Error", "Error initializing allegro", "Ok", ALLEGRO_MESSAGEBOX_ERROR);
 	}
+
+	//al_set_new_display_flags(ALLEGRO_OPENGL);
 
 	display = al_create_display(width, height);
 
@@ -169,6 +177,10 @@ int GameState::CheckKeyboard(ALLEGRO_EVENT ev)
             case ALLEGRO_KEY_RIGHT:
                 key[KEY_RIGHT] = true;
                 break;
+
+			case ALLEGRO_KEY_SPACE:
+				key[KEY_SPACE] = true;
+				break;
          }
 	}
 	else if(ev.type == ALLEGRO_EVENT_KEY_UP) 
@@ -190,6 +202,10 @@ int GameState::CheckKeyboard(ALLEGRO_EVENT ev)
             case ALLEGRO_KEY_RIGHT:
                 key[KEY_RIGHT] = false;
                 break;
+
+			case ALLEGRO_KEY_SPACE:
+				key[KEY_SPACE] = false;
+				break;
  
 			case ALLEGRO_KEY_ESCAPE:
 				return -1;
@@ -211,40 +227,90 @@ int GameState::GameLogic(ALLEGRO_EVENT ev)
 		pVector[0].ypos++;
 		printf("ypos is now %f\n", pVector[0].ypos);
 	}
+
+		if (key[KEY_SPACE])
+		{
+			if (pVector[0].inair == false)
+			{
+				pVector[0].moving = false;
+				pVector[0].yvel = -JUMPSPEED;
+				pVector[0].inair = true;
+			}
+			else
+			{
+				if (pVector[0].yvel >= MAXFALLSPEED)
+				{
+					pVector[0].yvel = MAXFALLSPEED;
+				}
+				pVector[0].yvel += YGRAVITY;
+
+				pVector[0].ypos += pVector[0].yvel;
+
+				if (pVector[0].ypos >= GROUNDHEIGHT)
+				{
+					pVector[0].inair = false;
+					pVector[0].ypos = GROUNDHEIGHT;
+				}
+			}
+		
+		}
+
 	if (key[KEY_LEFT])
 	{
-		if (pVector[0].xvel <= -MAXSPEED)
-			pVector[0].xvel = -MAXSPEED;
+		if (pVector[0].xvel <= -XMAXSPEED)
+			pVector[0].xvel = -XMAXSPEED;
 		else
-			pVector[0].xvel -= SPEEDUP;
+			pVector[0].xvel -= XSPEEDUP;
 
 		pVector[0].xpos += pVector[0].xvel;
 		pVector[0].FaceLeft();
-		printf("xpos is now %f\n", pVector[0].xpos);
-		pVector[0].moving = true;
+		if (pVector[0].inair == false)
+			pVector[0].moving = true;
+		else
+		pVector[0].curFrame = 0;
 	}
 	else if (key[KEY_RIGHT])
 	{
-		if (pVector[0].xvel >= MAXSPEED)
-			pVector[0].xvel = MAXSPEED;
+		if (pVector[0].xvel >= XMAXSPEED)
+			pVector[0].xvel = XMAXSPEED;
 		else
-		pVector[0].xvel += SPEEDUP;
+		pVector[0].xvel += XSPEEDUP;
 
 		pVector[0].xpos += pVector[0].xvel;
 
 		pVector[0].FaceRight();
-		printf("xpos is now %f\n", pVector[0].xpos);
-		pVector[0].moving = true;
+		if (pVector[0].inair == false)
+			pVector[0].moving = true;
+		else;
+			pVector[0].curFrame = 0;
 	}
 	else
 	{
 		pVector[0].moving = false;
 		pVector[0].curFrame = 0;
 		pVector[0].frameCount = 0;
-		pVector[0].xvel /= SLOWDOWNMULT;
+		pVector[0].xvel /= XSLOWDOWNMULT;
 		if (pVector[0].xvel < 0.2 && pVector[0].xvel > -0.2)
 			pVector[0].xvel = 0;
 		pVector[0].xpos += pVector[0].xvel;
+	}
+
+	if (pVector[0].inair && key[KEY_SPACE] == false)
+	{
+		if (pVector[0].yvel >= MAXFALLSPEED)
+		{
+			pVector[0].yvel = MAXFALLSPEED;
+		}
+
+		pVector[0].yvel += (2 * YGRAVITY);
+
+		pVector[0].ypos += pVector[0].yvel;
+
+		if (pVector[0].ypos >= GROUNDHEIGHT)
+		{
+			pVector[0].inair = false;
+			pVector[0].ypos = GROUNDHEIGHT;
+		}
 	}
 
 	for (unsigned int i = 0; i < pVector.size(); i++)

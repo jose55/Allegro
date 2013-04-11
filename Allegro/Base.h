@@ -11,8 +11,8 @@
 
 #define FPS 60
 
-enum Keys{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT};
-extern bool key[4];
+enum Keys{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE};
+extern bool key[5];
 
 class GameState
 {
